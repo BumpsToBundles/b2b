@@ -1,0 +1,34 @@
+# --------------------
+# Node Files
+# --------------------
+.nodemonignore
+npm-debug.log
+node_modules/
+
+# --------------------
+# SASS Files
+# --------------------
+.sass-cache/
+
+# --------------------
+# Bower Files
+# --------------------
+.bower-*/
+bower_components
+
+# --------------------
+# App Files
+# --------------------
+data/
+tests/results/**
+modules/public/
+modules/views/
+/public/build/
+/packages/contrib/
+/packages/**/**/public/assets/lib
+
+# -------------------
+# Sublime
+# -------------------
+*.sublime-project
+*.sublime-workspace
