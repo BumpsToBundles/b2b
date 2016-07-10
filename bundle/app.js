@@ -97,9 +97,9 @@
 	        packageModules.push(mn);
 	    }
 	
-	    var req = __webpack_require__(29);
+	    var req = !(function webpackMissingModule() { var e = new Error("Cannot find module \"./packages\""); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 	    req.keys().map(req);
-	    req = __webpack_require__(42);
+	    req = __webpack_require__(29);
 	    req.keys().map(req);
 	
 	    angular.module('mean', packageModules);
@@ -61067,12 +61067,33 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./custom/Bumps2Bundles/public/controllers/header.js": 30,
-		"./custom/Bumps2Bundles/public/controllers/index.js": 31,
-		"./custom/Bumps2Bundles/public/controllers/starter.js": 32,
-		"./custom/Bumps2Bundles/public/index.js": 33,
-		"./custom/Bumps2Bundles/public/routes/system.js": 40,
-		"./custom/Bumps2Bundles/public/routes/users.js": 41
+		"./meanio-admin/public/controllers/admin.js": 30,
+		"./meanio-admin/public/controllers/example.js": 31,
+		"./meanio-admin/public/controllers/modules.js": 32,
+		"./meanio-admin/public/controllers/settings.js": 33,
+		"./meanio-admin/public/controllers/themes.js": 34,
+		"./meanio-admin/public/controllers/users.js": 35,
+		"./meanio-admin/public/directives/editable.js": 36,
+		"./meanio-admin/public/index.js": 37,
+		"./meanio-admin/public/routes/admin.js": 42,
+		"./meanio-admin/public/services/module-settings.js": 43,
+		"./meanio-admin/public/services/modules.js": 44,
+		"./meanio-admin/public/services/settings.js": 45,
+		"./meanio-admin/public/services/users.js": 46,
+		"./meanio-circles/public/controllers/circles.js": 47,
+		"./meanio-circles/public/index.js": 48,
+		"./meanio-circles/public/routes/circles.js": 51,
+		"./meanio-circles/public/services/circles.js": 52,
+		"./meanio-system/public/routes/system.js": 53,
+		"./meanio-system/public/services/config.js": 54,
+		"./meanio-system/public/services/global.js": 55,
+		"./meanio-system/public/services/interceptor.js": 56,
+		"./meanio-system/public/services/menus.js": 57,
+		"./meanio-system/public/system.js": 58,
+		"./meanio-users/public/controllers/meanUser.js": 59,
+		"./meanio-users/public/index.js": 60,
+		"./meanio-users/public/routes/auth.js": 61,
+		"./meanio-users/public/services/meanUser.js": 62
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -61090,404 +61111,6 @@
 
 /***/ },
 /* 30 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', function ($scope, $rootScope, Menus, MeanUser, $state) {
-	
-	  var vm = this;
-	
-	  vm.menus = {};
-	  vm.hdrvars = {
-	    authenticated: MeanUser.loggedin,
-	    user: MeanUser.user,
-	    isAdmin: MeanUser.isAdmin
-	  };
-	
-	  // Default hard coded menu items for main menu
-	  var defaultMainMenu = [];
-	
-	  // Query menus added by modules. Only returns menus that user is allowed to see.
-	  function queryMenu(name, defaultMenu) {
-	
-	    Menus.query({
-	      name: name,
-	      defaultMenu: defaultMenu
-	    }, function (menu) {
-	      vm.menus[name] = menu;
-	    });
-	  }
-	
-	  // Query server for menus and check permissions
-	  queryMenu('main', defaultMainMenu);
-	  queryMenu('account', []);
-	
-	  $scope.isCollapsed = false;
-	
-	  $rootScope.$on('loggedin', function () {
-	    queryMenu('main', defaultMainMenu);
-	
-	    vm.hdrvars = {
-	      authenticated: MeanUser.loggedin,
-	      user: MeanUser.user,
-	      isAdmin: MeanUser.isAdmin
-	    };
-	  });
-	
-	  vm.logout = function () {
-	    MeanUser.logout();
-	  };
-	
-	  $rootScope.$on('logout', function () {
-	    vm.hdrvars = {
-	      authenticated: false,
-	      user: {},
-	      isAdmin: false
-	    };
-	    queryMenu('main', defaultMainMenu);
-	    $state.go('home');
-	  });
-	}]);
-
-/***/ },
-/* 31 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	angular.module('mean.system').controller('IndexController', ['$scope', 'Global', function ($scope, Global) {
-	  $scope.global = Global;
-	  $scope.sites = {
-	    'makeapoint': {
-	      'name': 'makeapoint',
-	      'text': 'Makeapoint is a platform to craft and fine-tune ideas and messages providing a graphical experience which brough an offline methodlogy online',
-	      'author': 'Linnovate',
-	      'link': 'http://www.linnovate.net',
-	      'image': '/meanStarter/assets/img/makeapoint.png'
-	    },
-	    'cactus': {
-	      'name': 'Cactus Intranet',
-	      'text': 'Cactus Intranet is an enterprise social network with features like real-time newsfeed, notifications, groups, events, polls, referral system etc. The system has role based permission system, allowing different stakeholders access and controls relevant to them.',
-	      'author': 'QED42',
-	      'link': 'http://www.qed42.com',
-	      'image': '/meanStarter/assets/img/cactus.png'
-	    }
-	  };
-	  $scope.packages = {
-	    'gmap': {
-	      'name': 'gmap',
-	      'text': 'gmap lets you add geographical information to your applications objects',
-	      'author': 'linnovate',
-	      'link': 'http://www.qed42.com',
-	      'image': '/meanStarter/assets/img/gmap.png'
-	    },
-	    'upload': {
-	      'name': 'Upload',
-	      'text': 'hello text',
-	      'author': 'Linnovate',
-	      'link': 'http://www.linnovate.net',
-	      'image': 'http://cdn.designbyhumans.com/pictures/blog/09-2013/pop-culture-cats/Pop_Culture_Cats_Hamilton_Hipster.jpg'
-	    },
-	    'socket': {
-	      'name': 'Socket',
-	      'text': 'Socket.io support',
-	      'author': 'Linnovate',
-	      'link': 'http://www.linnovate.net',
-	      'image': 'http://cdn.designbyhumans.com/pictures/blog/09-2013/pop-culture-cats/Pop_Culture_Cats_Hamilton_Hipster.jpg'
-	    }
-	  };
-	
-	  $scope.$watch(function () {
-	    for (var i = 0; i < $scope.sites.length; i += 1) {
-	      if ($scope.sites[i].active) {
-	        return $scope.sites[i];
-	      }
-	    }
-	  }, function (currentSlide, previousSlide) {
-	    if (currentSlide !== previousSlide) {
-	      console.log('currentSlide:', currentSlide);
-	    }
-	  });
-	}]);
-
-/***/ },
-/* 32 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	(function () {
-	  'use strict';
-	
-	  angular.module('mean.meanStarter').controller('StarterController', StarterController);
-	
-	  StarterController.$inject = ['$scope', 'Global'];
-	
-	  function StarterController($scope, Global) {
-	    // Original scaffolded code.
-	    $scope.global = Global;
-	    $scope.package = {
-	      name: 'meanStarter'
-	    };
-	  }
-	})();
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	__webpack_require__(34);
-	
-	__webpack_require__(36);
-	
-	__webpack_require__(38);
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(35);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../../../node_modules/css-loader/index.js!./common.css", function() {
-				var newContent = require("!!./../../../../../../node_modules/css-loader/index.js!./common.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".page-header {\n    padding-bottom: 0 !important;\n    margin: 0 !important;\n    border-bottom: 0 !important;\n}\n.page-header .navbar-nav {\n    float: right;\n}\n.page-header > div > div, .page-header > div > ul {\n    display: inline-block;\n}\n.text-edit {\n    float: right; \n    margin-top: 12px;\n}\n.account {\n    text-align:right;\n}\n.account > div, .account > ul {\n    text-align: left;\n}\n.navbar .nav > li > a.brand {\n    padding-left: 20px;\n    margin-left: 0\n}\n.content {\n    margin-top: 70px;\n    width: 100%\n}\nfooter {\n\tposition: fixed;\n\tleft: 0;\n\tbottom: 0;\n\theight: 30px;\n\twidth: 100%;\n\tbackground: #ddd;\n\t-webkit-box-shadow: 0 8px 6px 6px black;\n\t-moz-box-shadow: 0 8px 6px 6px black;\n\tbox-shadow: 0 8px 6px 6px black\n}\nfooter p {\n\tpadding: 5px 0 12px 10px\n}\n\n.featuredpic img{\n  width:510px;\n}", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(37);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../../../node_modules/css-loader/index.js!./loginForms.css", function() {
-				var newContent = require("!!./../../../../../../node_modules/css-loader/index.js!./loginForms.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "html {\n    height: 100%;\n}\n\nbody.login, body.register,  body.forgot-password {\nbackground: url(\"/meanStarter/assets/img/bg.png\");\n    height: 100%;\n    position: relative;\n}\n@font-face {\n    font-family: 'futura_bkbook';\n    src: url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.eot\");\n    src: url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.svg#futura_bkbook\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n\n@font-face {\n    font-family: 'open_sans_hebrewregular';\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-regular.eot\");\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-regular.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.svg#open_sans_hebrewregular\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n\n@font-face {\n    font-family: 'open_sans_hebrewlight';\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-light.eot\");\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-light.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-light.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/opensanshebrew-light.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-light.svg#open_sans_hebrewlight\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n\n@font-face {\n    font-family: 'proxima_nova_rgregular';\n    src: url(\"/meanStarter/assets/fonts/mark_simonson_-_proxima_nova_regular.eot\");\n    src: url(\"/meanStarter/assets/fonts/mark_simonson_-_proxima_nova_regular.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/mark_simonson_-_proxima_nova_regular.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/mark_simonson_-_proxima_nova_regular.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/mark_simonson_-_proxima_nova_regular.svg#proxima_nova_rgregular\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n\n@font-face {\n    font-family: 'proxima_novalight';\n    src: url(\"/meanStarter/assets/fonts/proximanova-light.eot\");\n    src: url(\"/meanStarter/assets/fonts/proximanova-light.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/proximanova-light.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/proximanova-light.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/proximanova-light.svg#proxima_novalight\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n.form {\n    background: #ffffff;\n    box-shadow: 0 1px 3px 1px #003644;\n    margin-top: 35px;\n    left: 50%;\n    position: relative;\n}\n\n.main-form {\n    width: 748px;\n    height: 435px;\n    margin-left: -374px;\n}\n\n.main-form.register-form {\n    height: 622px;\n}\n\n.login-form__left {\n    width: 440px;\n    height: 100%;\n    float: left;\n    padding: 34px 0 0 27px;\n}\n\n.login-form__left h2, .forgot_password_form h2 {\n    font-size: 30px;\n    padding-bottom: 4px;\n    font-family: \"futura_bkbook\";\n    margin: 0;\n    text-transform: uppercase;\n}\n\n.login-form__left p, .forgot_password_form p {\n    font-size: 16px;\n    font-family: 'proxima_nova_rgregular';\n}\n\n.main-form .input-wrapper {\n    position: relative;\n    margin-bottom: 10px;\n}\n\n.main-form .input-wrapper input {\n    width: 401px;\n    border: 1px solid #d3d3d3;\n    border-radius: 5px;\n    padding: 18px 0 18px 16px;\n    outline: none;\n    font-size: 15px;\n    font-family: 'proxima_nova_rgregular';\n    line-height: 22px;\n}\n\n.main-form .input-wrapper input:invalid {\n    box-shadow: none;\n}\n\n.main-form .input-wrapper input:focus {\n    border-color: #66afe9;\n    outline: 0;\n    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);\n    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(102,175,233,0.6);\n}\n\n.pic.email {\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/mail_login.png\") no-repeat;\n    width: 30px;\n    height: 21px;\n    top: 18px;\n    right: 28px;\n}\n\n.pic.password {\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/eye_password.png\") no-repeat 50% 50%;\n    width: 40px;\n    height: 30px;\n    top: 16px;\n    right: 22px;\n    cursor: pointer;\n}\n\n.login-form__left .icon_hide_password {\n    background: url(\"/meanStarter/assets/img/eye_password_disabled.png\") no-repeat 50% 50%;\n    width: 40px;\n    height: 30px;\n    top: 16px;\n    right: 22px;\n}\n\n.login-form__left .hide_text_password {\n    display: none;\n    position: absolute;\n    line-height: 38px;\n    width: 125px;\n    height: 34px;\n    bottom: 39px;\n    right: -40px;\n    background: #0588a0;\n    text-align: center;\n    border-radius: 5px;\n    font-family: \"proxima_nova_rgregular\";\n    color: white;\n}\n\n.login-form__left .hide_text_password:after {\n    content: '';\n    display: block;\n    position: absolute;\n    left: 50%;\n    top: 100%;\n    border-top: 10px solid #0588a0;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    margin-left: -4px;\n}\n\n.pic.password:hover .hide_text_password {\n    display: block;\n}\n\n.icon_hide_password:hover .hide_text_password {\n    display: block;\n}\n\n.error_message {\n    display: none;\n    position: absolute;\n    line-height: 29px;\n    height: auto;\n    bottom: 67px;\n    left: 0;\n    background: blue;\n    text-align: center;\n    border-radius: 3px;\n    min-width: 30px;\n    max-width: 150px;\n}\n\n.error_message:after {\n    content: '';\n    display: block;\n    position: absolute;\n    left: 50%;\n    top: 100%;\n    border-top: 10px solid blue;\n    border-left: 5px solid transparent;\n    border-right: 5px solid transparent;\n    margin-left: -4px;\n}\n\n.login-form__left .forgot_password {\n    margin-top: -5px;\n    margin-left: 8px;\n}\n\n.login-form__left .forgot_password a {\n    font-size: 15px;\n    color: #68a80c;\n    text-decoration: none;\n    font-family: \"open_sans_hebrewregular\";\n}\n\n.login-form__left .button_login {\n    margin-top: 23px;\n}\n\n.submit_button {\n    display: inline-block;\n    border: none;\n    cursor: pointer;\n    background: url(\"/meanStarter/assets/img/button_login.png\") no-repeat 50% 50%;\n    width: 107px;\n    height: 47px;\n    font-size: 21px;\n    color: white;\n    font-family: \"open_sans_hebrewregular\";\n}\n\n.submit_button:hover {\n    background: url(\"/meanStarter/assets/img/button_login_hover.png\") no-repeat 50% 50%;\n}\n\n.submit_button:focus {\n    outline: none;\n}\n\n.button_login p,\n.button_send p,\n.button_register p {\n    display: inline-block;\n    font-size: 15px;\n    margin-left: 15px;\n    font-family: \"open_sans_hebrewregular\";\n    vertical-align: top;\n    padding-top: 11px;\n}\n\n.button_send p {\n    margin-left: 65px;\n}\n\n.button_register {\n    margin-top: 25px;\n}\n\n.button_login a,\n.button_send a,\n.button_register a {\n    display: inline-block;\n    font-size: 15px;\n    color: #68a80c;\n    text-decoration: none;\n    margin-left: 1px;\n    padding-top: 11px;\n    vertical-align: top;\n    font-family: \"open_sans_hebrewregular\";\n}\n\n.login-form__center {\n    height: 100%;\n    float: left;\n    background: url(\"/meanStarter/assets/img/devide_line.png\") no-repeat 50% 30%;\n    padding: 0 10px;\n}\n\n.register-form .login-form__center {\n    margin-top: 38px;\n    background: url(\"/meanStarter/assets/img/devide_line_long.png\") no-repeat 50% 0;\n}\n\n.login-form__center p {\n    margin-top: 155px;\n    font-family: 'proxima_novalight';\n    font-size: 16px;\n}\n\n.register-form .login-form__center p {\n    margin-top: 227px;\n}\n\n.login-form__right {\n    height: 100%;\n    float: left;\n    width: 270px;\n    padding-left: 26px;\n}\n.login-form__right .social_wrap {\n    width: 235px;\n    height: 270px;\n    margin-top: 36px;\n    padding-left: 0;\n    display: block;\n    position:relative;\n}\n\n.register-form .login-form__right .social_wrap {\n    height: 483px;\n}\n\n.login-form__right .bigger {\n    height: 345px;\n    margin-top: 35px;\n}\n\n.login-form__right .bigger .social {\n    top: inherit;\n    -ms-transform: none; /* IE 9 */\n    -webkit-transform: none; /* Chrome, Safari, Opera */\n    transform: none;\n}\n\n.login-form__right .social {\n    margin: 0;\n    padding-left: 0;\n    display: block;\n    list-style:none;\n    position:absolute;\n    top:50%;\n    left:0;\n    right:0;\n    -ms-transform: translate(0, -50%); /* IE 9 */\n    -webkit-transform: translate(0, -50%); /* Chrome, Safari, Opera */\n    transform: translate(0, -50%);\n}\n\n.login-form__right .social_icon {\n    width: 230px;\n    height: 60px;\n    border: 1px solid #e1e1e0;\n    border-radius: 5px;\n    margin-bottom: 10px;\n    list-style-type: none;\n    vertical-align: middle;\n    display: inline-block;\n}\n\n.login-form__right .social_icon:hover {\n    background: #f1f1f1;\n}\n\n.login-form__right .social_icon .button {\n    display: block;\n    text-decoration: none;\n    padding: 22px 0 22px 60px;\n    line-height: 1;\n    color: #959595;\n    position: relative;\n}\n\n.login-form__right .social_icon .button:active {\n    color: #959595;\n}\n\n.login-form__right .social_icon .button span {\n    font-size: 15px;\n    font-family: 'open_sans_hebrewlight';\n}\n\n.login-form__right .social_icon .button span:visited {\n    color: #959595;\n}\n\n.login-form__right .social_icon_linkedin .button:before {\n    content: '';\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/social_in.png\") no-repeat 50% 50%;\n    width: 50px;\n    height: 47px;\n    top: 10px;\n    left: 0;\n}\n\n.login-form__right .social_icon_facebook .button:before {\n    content: '';\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/social_fb.png\") no-repeat 50% 50%;\n    width: 41px;\n    height: 40px;\n    top: 10px;\n    left: 8px;\n}\n\n.login-form__right .social_icon_github .button:before {\n    content: '';\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/social_github.png\") no-repeat 50% 50%;\n    width: 40px;\n    height: 40px;\n    top: 10px;\n    left: 8px;\n}\n\n.login-form__right .social_icon_twitter .button:before {\n    content: '';\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/social_tw.png\") no-repeat 50% 50%;\n    width: 40px;\n    height: 41px;\n    top: 10px;\n    left: 8px;\n}\n\n.login-form__right .social_icon_google .button:before {\n    content: '';\n    position: absolute;\n    background: url(\"/meanStarter/assets/img/social_g+.png\") no-repeat 50% 50%;\n    width: 40px;\n    height: 41px;\n    top: 10px;\n    left: 8px;\n}\n\n.woman_ninja_bottom {\n    position: absolute;\n    left: 21%;\n    pointer-events: none;\n}\n\n.woman_ninja_left {\n    position: absolute;\n    top: 75px;\n    left: -410px;\n    pointer-events: none;\n}\n\n.registration_form {\n    width: 440px;\n    float: left;\n    margin-right: 10px;\n}\n\n.forgot_password_form {\n    padding: 34px 27px;\n    min-height: 280px;\n    height: auto;\n    width: 465px;\n    margin-left: -232px;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(39);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../../../node_modules/css-loader/index.js!./starter.css", function() {
-				var newContent = require("!!./../../../../../../node_modules/css-loader/index.js!./starter.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "@font-face {\n    font-family: 'futura_bkbook';\n    src: url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.eot\");\n    src: url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/ufonts.com_futura-book.svg#futura_bkbook\") format(\"svg\");\n    font-weight: normal;\n    font-style: normal;\n}\n\n@font-face {\n    font-family: 'open_sans_hebrewregular';\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-regular.eot\");\n    src: url(\"/meanStarter/assets/fonts/opensanshebrew-regular.eot?#iefix\") format(\"embedded-opentype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.woff\") format(\"woff\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.ttf\") format(\"truetype\"), url(\"/meanStarter/assets/fonts/opensanshebrew-regular.svg#open_sans_hebrewregular\") format(\"svg\");\n    font-weight: bold;\n    font-style: normal;\n}\n\n.welcome.container-fluid {\n  margin:18px;\n  padding-top:10px;\n  background-color:#fff;\n  color:#525252;\n}\n\n.welcome .info, .welcome .featured {\n  float:left;\n}\n.welcome .row {\n  margin-top:10px;\n  background-color:#f3f3f3;\n}\n.welcome .first{\n  padding:0;\n  margin-bottom:30px;\n  font-size:22px;\n  background-color:#fff;\n}\n\n.welcome {\n  padding-bottom: 4px;\n  /*font-family: \"futura_bkbook\";*/\n  font-family:\"open_sans_hebrewregular\";\n  font-size:16px;\n  margin: 0;\n  margin:10px;\n}\n\n.welcome .info {\n  margin-top:10px;\n  background-color: #fff;\n\tpadding-bottom: 10px;\n}\n\n.welcome h1 {\n  font-size:30px;\n  text-transform: uppercase;\n  color:#0e0e0e;\n}\n\n.welcome h2 {\n  margin-top: 27px;\n  font-size:30px;\n  font-weight:300;\n}\n\n.featured-packages h2{\n\tmargin-top:0;\n}\n\n.welcome h3 {\n  font-size:17px;\n/*  font-weight:300; */\n  text-transform: uppercase;\n  color: #0e0e0e;\n}\n\n.docs h3 {\n  padding:10px;\n}\n\n\n.welcome .packages, .welcome .community, .welcome .featured-packages {\n  clear:both;\n  margin-top:80px;\n  height:100%;\n  border-top:3px solid #f3f3f3;\n}\n\n.welcome .packages h3 {\n  margin:20px 0 20px 0;\n}\n\n/* Docs */\n.welcome .info ul {\n  padding-left:20px;\n  width:220px;\n  list-style:none;\n}\n\n.welcome .info ul li {\n  width:100px;\n  font-size:14px;\n}\n\n.welcome .info ul li:before {\n    content: '>';\n     margin: 0 0.6em 0 -1em;\n}\n\n.welcome  p {\n  font-size: 12px;\n  margin-top: 10px;\n  margin-left:53px;\n}\n.welcome .info .docs {\n  height:100%;\n}\n.welcome .info .docs p{\n  font-size:14px;\n}\n\n.docs-desc {\n  float:left;\n}\n\n.docs-link {\n  margin: 16px 0 0 0;\n  float:left;\n  width:120px;\n}\n\n.docs-link.first {\n  margin: 16px 0 0 53px;\n}\n\n.morelink {\n  margin: 16px 0 6px 0;\n  clear:both;\n  float:right;\n}\n\n.docs .morelink {\n  margin-top:30px;\n}\n\n.morelink :before {\n  text-transform: uppercase;\n  content: '>';\n  margin: 0 0.5em 0 -1em;\n}\n\n/* Packages */\n\n.packages .package{\n  float:left;\n  width:200px;\n  margin-right:40px;\n}\n\n/* Packages */\n.packages .package h4, .community .package h4{\n  text-transform: uppercase;\n  margin-left:53px;\n  color:#176583;\n  font-size:16px;\n}\n\n.packages .package p {\n  margin-left:53px;\n}\n\n/* Community */\n.welcome-sprite{\n  float:left;\n  width:53px;\n  height:53px;\n}\n.welcome-sprite{\n  background-image: url(\"/meanStarter/assets/img/welcome_sprite.png\");\n  background-repeat: no-repeat;\n  display: block;\n}\n.docs .welcome-sprite {\n  background-position: 0 -7px ;\n}\n\n.packages .welcome-sprite {\n  background-position: -60px 0;\n}\n\n.community .welcome-sprite {\n  background-position: -120px 0;\n}\n\n.community .package {\n  float:left;\n  margin-bottom:10px;\n}\n.community .package p{\n  width:190px;\n  margin: 0 0 0 10px;\n}\n.community .package h4{\n  margin: 0 0 0 10px;\n}\n\n\n.socialsprite {\n    background-image: url(\"/meanStarter/assets/img/welcome_social.png\");\n    background-repeat: no-repeat;\n    display: block;\n    float:left;\n}\n\n.sprite-facebook {\n    width: 39px;\n    height: 42px;\n    background-position: -5px -5px;\n}\n\n.sprite-github {\n    width: 40px;\n    height: 44px;\n    background-position: -54px -5px;\n}\n\n.sprite-irc {\n    width: 38px;\n    height: 42px;\n    background-position: -104px -5px;\n}\n\n.sprite-stackoverflow {\n    width: 40px;\n    height: 44px;\n    background-position: -152px -5px;\n}\n\n/* Featured Pic */\n.featuredpic img{\n  width:510px;\n}\n\n.welcome .community h3{\n  margin-bottom:40px;\n}\n\n/* Featured Sites */\n\n\n.featured-sites h4{\n  font-size:24px;\n}\n\n.featured-sites h4 span{\n  font-size:14px;\n}\n\n.featured-sites p, .featured-packages p {\n  font-size:14px;\n  margin-left:0;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	//Setting up route
-	
-	angular.module('mean.meanStarter').config(['$meanStateProvider', '$urlRouterProvider', function ($meanStateProvider, $urlRouterProvider) {
-	  // For unmatched routes:
-	  $urlRouterProvider.otherwise('/');
-	
-	  // states for my app
-	  $meanStateProvider.state('home', {
-	    url: '/',
-	    templateUrl: 'meanStarter/views/system/index.html'
-	  });
-	}]).config(['$locationProvider', function ($locationProvider) {
-	  $locationProvider.html5Mode({
-	    enabled: true,
-	    requireBase: false
-	  });
-	}]);
-
-/***/ },
-/* 41 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	//Setting up route
-	
-	angular.module('mean.meanStarter').config(['$meanStateProvider', function ($meanStateProvider) {
-	
-	  // states for users
-	  $meanStateProvider.state('auth', {
-	    url: '/auth',
-	    abstract: true,
-	    templateUrl: 'meanStarter/views/users/index.html'
-	  }).state('auth.login', {
-	    url: '/login',
-	    templateUrl: 'meanStarter/views/users/login.html',
-	    resolve: {
-	      loggedin: function loggedin(MeanUser) {
-	        return MeanUser.checkLoggedOut();
-	      }
-	    }
-	  }).state('auth.register', {
-	    url: '/register',
-	    templateUrl: 'meanStarter/views/users/register.html',
-	    resolve: {
-	      loggedin: function loggedin(MeanUser) {
-	        return MeanUser.checkLoggedOut();
-	      }
-	    }
-	  }).state('forgot-password', {
-	    url: '/forgot-password',
-	    templateUrl: 'meanStarter/views/users/forgot-password.html',
-	    resolve: {
-	      loggedin: function loggedin(MeanUser) {
-	        return MeanUser.checkLoggedOut();
-	      }
-	    }
-	  }).state('reset-password', {
-	    url: '/reset/:tokenId',
-	    templateUrl: 'meanStarter/views/users/reset-password.html',
-	    resolve: {
-	      loggedin: function loggedin(MeanUser) {
-	        return MeanUser.checkLoggedOut();
-	      }
-	    }
-	  });
-	}]);
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./meanio-admin/public/controllers/admin.js": 43,
-		"./meanio-admin/public/controllers/example.js": 44,
-		"./meanio-admin/public/controllers/modules.js": 45,
-		"./meanio-admin/public/controllers/settings.js": 46,
-		"./meanio-admin/public/controllers/themes.js": 47,
-		"./meanio-admin/public/controllers/users.js": 48,
-		"./meanio-admin/public/directives/editable.js": 49,
-		"./meanio-admin/public/index.js": 50,
-		"./meanio-admin/public/routes/admin.js": 55,
-		"./meanio-admin/public/services/module-settings.js": 56,
-		"./meanio-admin/public/services/modules.js": 57,
-		"./meanio-admin/public/services/settings.js": 58,
-		"./meanio-admin/public/services/users.js": 59,
-		"./meanio-circles/public/controllers/circles.js": 60,
-		"./meanio-circles/public/index.js": 61,
-		"./meanio-circles/public/routes/circles.js": 64,
-		"./meanio-circles/public/services/circles.js": 65,
-		"./meanio-system/public/routes/system.js": 66,
-		"./meanio-system/public/services/config.js": 67,
-		"./meanio-system/public/services/global.js": 68,
-		"./meanio-system/public/services/interceptor.js": 69,
-		"./meanio-system/public/services/menus.js": 70,
-		"./meanio-system/public/system.js": 71,
-		"./meanio-users/public/controllers/meanUser.js": 72,
-		"./meanio-users/public/index.js": 73,
-		"./meanio-users/public/routes/auth.js": 74,
-		"./meanio-users/public/services/meanUser.js": 75
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 42;
-
-
-/***/ },
-/* 43 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61531,7 +61154,7 @@
 
 
 /***/ },
-/* 44 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61557,7 +61180,7 @@
 	]);
 
 /***/ },
-/* 45 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61581,7 +61204,7 @@
 	]);
 
 /***/ },
-/* 46 */
+/* 33 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61681,7 +61304,7 @@
 
 
 /***/ },
-/* 47 */
+/* 34 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61738,7 +61361,7 @@
 
 
 /***/ },
-/* 48 */
+/* 35 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61849,7 +61472,7 @@
 
 
 /***/ },
-/* 49 */
+/* 36 */
 /***/ function(module, exports) {
 
 	angular.module('mean.admin').directive('ngEnter', function() {
@@ -61933,24 +61556,24 @@
 
 
 /***/ },
-/* 50 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(51);
-	window.ZeroClipboard = __webpack_require__(53);
-	__webpack_require__(54);
+	__webpack_require__(38);
+	window.ZeroClipboard = __webpack_require__(40);
+	__webpack_require__(41);
 
 
 /***/ },
-/* 51 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(52);
+	var content = __webpack_require__(39);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -61970,7 +61593,7 @@
 	}
 
 /***/ },
-/* 52 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -61984,7 +61607,7 @@
 
 
 /***/ },
-/* 53 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -64570,14 +64193,14 @@
 	}());
 
 /***/ },
-/* 54 */
+/* 41 */
 /***/ function(module, exports) {
 
 	/*! ng-clip 16-12-2014 */
 	!function(a,b){"use strict";b.module("ngClipboard",[]).provider("ngClip",function(){var a=this;return this.path="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf",{setPath:function(b){a.path=b},setConfig:function(b){a.config=b},$get:function(){return{path:a.path,config:a.config}}}}).run(["ngClip",function(a){var c={swfPath:a.path,trustedDomains:["*"],allowScriptAccess:"always",forceHandCursor:!0};ZeroClipboard.config(b.extend(c,a.config||{}))}]).directive("clipCopy",["ngClip",function(){return{scope:{clipCopy:"&",clipClick:"&",clipClickFallback:"&"},restrict:"A",link:function(a,c,d){if(ZeroClipboard.isFlashUnusable())return void c.bind("click",function(b){a.$apply(a.clipClickFallback({$event:b,copy:a.$eval(a.clipCopy)}))});var e=new ZeroClipboard(c);""===d.clipCopy&&(a.clipCopy=function(){return c[0].previousElementSibling.innerText}),e.on("ready",function(){e.on("copy",function(b){var c=b.clipboardData;c.setData(d.clipCopyMimeType||"text/plain",a.$eval(a.clipCopy))}),e.on("aftercopy",function(){b.isDefined(d.clipClick)&&a.$apply(a.clipClick)}),a.$on("$destroy",function(){e.destroy()})})}}}])}(window,window.angular);
 
 /***/ },
-/* 55 */
+/* 42 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64623,7 +64246,7 @@
 	  ]);
 
 /***/ },
-/* 56 */
+/* 43 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64668,7 +64291,7 @@
 	]);
 
 /***/ },
-/* 57 */
+/* 44 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64686,7 +64309,7 @@
 	]);
 
 /***/ },
-/* 58 */
+/* 45 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64724,7 +64347,7 @@
 
 
 /***/ },
-/* 59 */
+/* 46 */
 /***/ function(module, exports) {
 
 	//Users service used for users REST endpoint
@@ -64742,7 +64365,7 @@
 
 
 /***/ },
-/* 60 */
+/* 47 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64775,21 +64398,21 @@
 
 
 /***/ },
-/* 61 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(62);
+	__webpack_require__(49);
 
 /***/ },
-/* 62 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(63);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -64809,7 +64432,7 @@
 	}
 
 /***/ },
-/* 63 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -64823,7 +64446,7 @@
 
 
 /***/ },
-/* 64 */
+/* 51 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64877,7 +64500,7 @@
 
 
 /***/ },
-/* 65 */
+/* 52 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64907,7 +64530,7 @@
 
 
 /***/ },
-/* 66 */
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -64960,7 +64583,7 @@
 
 
 /***/ },
-/* 67 */
+/* 54 */
 /***/ function(module, exports) {
 
 	angular.module('mean.system').provider('$meanConfig', [function() {
@@ -64989,7 +64612,7 @@
 
 
 /***/ },
-/* 68 */
+/* 55 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65113,7 +64736,7 @@
 
 
 /***/ },
-/* 69 */
+/* 56 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65151,7 +64774,7 @@
 
 
 /***/ },
-/* 70 */
+/* 57 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65167,7 +64790,7 @@
 
 
 /***/ },
-/* 71 */
+/* 58 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65188,7 +64811,7 @@
 
 
 /***/ },
-/* 72 */
+/* 59 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65306,7 +64929,7 @@
 	  ]);
 
 /***/ },
-/* 73 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65314,7 +64937,7 @@
 	__webpack_require__(26);
 
 /***/ },
-/* 74 */
+/* 61 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -65333,7 +64956,7 @@
 
 
 /***/ },
-/* 75 */
+/* 62 */
 /***/ function(module, exports) {
 
 	'use strict';
